@@ -1,0 +1,27 @@
+<div id="animalDisplay" class="flexCenter">
+  <div class="animalInnerDisplay flexCenter flexColumn">
+    <h1>{{ animals[0].name }}</h1>
+    <img ng-src="{{ animals[0].img }}" alt="photo of {{ animals[0].name }}">
+  </div>
+</div>
+
+<style>
+  #animalDisplay {
+    border: 3px solid black;
+    min-height: 400px;
+    min-width: 300px;
+  }
+
+  .animalInnerDisplay {
+    background-color: lightgreen;
+    height: 380px;
+    width: 280px;
+  }
+
+  .animalInnerDisplay img {
+    height: auto;
+    width: 100%;
+  }
+
+
+</style>
