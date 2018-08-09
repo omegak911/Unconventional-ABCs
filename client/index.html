@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
+  <script src="./app.js"></script>
+  <title>Unconventional ABCs</title>
+</head>
+<body ng-app="myAnimalApp">
+  <div ng-controller="myAnimalController" class="flexCenter flexColumn">
+    <div class="welcome flexCenter flexColumn">
+      <div>
+        <h3>Welcome!  To start, please choose an option</h3>
+      </div>
+      <div class="options flexCenter">
+        <button>Play Alphabetically</button>
+        <button>Play in reverse</button>
+        <button>Play in random</button>
+      </div>
+    </div>
+    <div>
+      <ul>
+        <li ng-repeat="animal in animals">{{ animal.name }}</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
+
+<style>
+  body {
+    margin: 0;
+  }
+
+  .flexCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .flexColumn {
+    flex-direction: column;
+  }
+
+  .welcome {
+    background-color: lightblue;
+    width: 90%;
+  }
+
+  .options {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+</style>
