@@ -1,0 +1,21 @@
+{
+  "name": "Unconventional-ABCs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omegak911/Unconventional-ABCs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/omegak911/Unconventional-ABCs/issues"
+  },
+  "homepage": "https://github.com/omegak911/Unconventional-ABCs#readme",
+  "dependencies": {}
+}
