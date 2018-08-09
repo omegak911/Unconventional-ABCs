@@ -1,0 +1,32 @@
+<div class="flexCenter flexColumn">
+  <div class="welcome flexCenter flexColumn">
+    <div>
+      <h3>Welcome!  To start, please choose an option</h3>
+    </div>
+    <div class="options flexCenter">
+      <button ng-click="startGame('abc')">Play Alphabetically</button>
+      <button ng-click="startGame('cba')">Play in reverse</button>
+      <button ng-click="startGame('acb')">Play in random</button>
+      <input type="text" ng-model="search">
+    </div>
+  </div>
+  <div>
+    <ul>
+      <li ng-repeat="animal in remainingAnimals | orderBy: order">{{ animal.name }}</li>
+    </ul>
+  </div>
+  <div ng-include="'../components/animalDisplay.html'"></div>
+</div>
+
+<style>
+  .welcome {
+    background-color: lightblue;
+    width: 90%;
+  }
+
+  .options {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+</style>
