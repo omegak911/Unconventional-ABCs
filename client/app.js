@@ -24,7 +24,6 @@ myAnimalApp.factory('store', function($http) {
   var store = {}
 
   store.animals = [];
-  store.solvedAnimals = [];
   store.remainingAnimals = [];
   store.animalIndex = 0;
   store.currentAnimal = null;
@@ -41,7 +40,7 @@ myAnimalApp.factory('store', function($http) {
 })
 
 myAnimalApp.controller('myGameController', 
-  ['$scope', '$location', 'store', function($scope, $location, store) {
+  ['$scope', '$location', '$interval', 'store', function($scope, $location, $interval, store) {
   
   const SpeechRecognitionSetup = () => {
     // const grammar = ['j','k','i']
@@ -63,19 +62,19 @@ myAnimalApp.controller('myGameController',
 
     recognition.onresult = async (event) => {
       let letter = event.results[0][0].transcript;
-      console.log(letter)
-      console.log(store.currentAnimal.name);
+      //if correct, swap to animalDisplay
       if (letter[0].toLowerCase() === store.currentAnimal.name[0].toLowerCase()) {
-        console.log('correct!')
-
-        //switch to animalDisplay
-        //maybe have speechsynthesis
-        //after 3-5 seconds, move onto the next letter
+        const decrement = $interval(() => $scope.countdown -= 1, 1000);
         $scope.displayMode = 'animal';
         $scope.$apply();
-        setTimeout(() => $scope.updateIndex(), 5000);
-
+        //update to next letter after 5 seconds
+        setTimeout( async () => {
+          await $interval.cancel(decrement);
+          await $scope.updateRemainingAndSolved();
+          await $scope.updateIndex();
+        }, 5000);
       } else {
+        //we'll probably want to display a error message on the front end
         console.log('please try again')
       }
 
@@ -85,10 +84,11 @@ myAnimalApp.controller('myGameController',
     recognition.onend = () => {
       SpeechRecognitionSetup();
     }
-
   }
 
+  $scope.countdown = 5;
   $scope.showCurrentAnimal = store.currentAnimal;
+  $scope.solvedLetters = [];
 
   $scope.updateIndex = () => {
     if (store.gameMode === 'abc') {
@@ -101,7 +101,14 @@ myAnimalApp.controller('myGameController',
     store.currentAnimal = store.remainingAnimals[store.animalIndex];
     $scope.showCurrentAnimal = store.currentAnimal;
     $scope.displayMode = 'letter';
+    $scope.countdown = 5;
     $scope.$apply();
+    console.log($scope.solvedLetters)
+  }
+
+  $scope.updateRemainingAndSolved = () => {
+    const animal = store.remainingAnimals.splice(store.animalIndex, 1)[0];
+    $scope.solvedLetters.push(animal.name[0]);
   }
 
   $scope.displayMode = 'letter'; 
