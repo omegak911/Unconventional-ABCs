@@ -45,7 +45,6 @@ myAnimalApp.controller('myGameController',
   const SpeechRecognitionSetup = () => {
     // const grammar = ['j','k','i']
     // const grammar = '#JSGF V1.0; grammar letters; public <letter> = a | b | i | j | k ;'
-
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const SpeechGrammerList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
     const SpeechRecognitionEvent = window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent
@@ -71,18 +70,20 @@ myAnimalApp.controller('myGameController',
         setTimeout( async () => {
           await $interval.cancel(decrement);
           await $scope.updateRemainingAndSolved();
+          await recognition.stop();
           await $scope.updateIndex();
         }, 5000);
       } else {
         //we'll probably want to display a error message on the front end
         console.log('please try again')
+        recognition.stop();
       }
-
-      recognition.stop();
     }
 
     recognition.onend = () => {
-      SpeechRecognitionSetup();
+      if (store.remainingAnimals.length > 0) {
+        SpeechRecognitionSetup();
+      }
     }
   }
 
@@ -116,7 +117,9 @@ myAnimalApp.controller('myGameController',
   }
 
   $scope.displayMode = 'letter'; 
-  SpeechRecognitionSetup();
+  if (store.remainingAnimals.length > 0) {
+    SpeechRecognitionSetup();
+  }
 }])
 
 
