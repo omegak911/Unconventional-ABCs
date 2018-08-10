@@ -43,9 +43,52 @@ myAnimalApp.factory('store', function($http) {
 myAnimalApp.controller('myGameController', 
   ['$scope', '$location', 'store', function($scope, $location, store) {
   
-  $scope.showCurrentAnimal = () => {
-    return store.currentAnimal;
+  const SpeechRecognitionSetup = () => {
+    // const grammar = ['j','k','i']
+    // const grammar = '#JSGF V1.0; grammar letters; public <letter> = a | b | i | j | k ;'
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechGrammerList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
+    const SpeechRecognitionEvent = window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent
+  
+    const recognition = new SpeechRecognition();
+    const SpeechRecognitionList = new SpeechGrammerList();
+    // SpeechRecognitionList.addFromString(grammar, 1);
+    recognition.grammars = SpeechRecognitionList;
+    recognition.continuous = true;
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    recognition.start();
+
+    recognition.onresult = async (event) => {
+      let letter = event.results[0][0].transcript;
+      console.log(letter)
+      console.log(store.currentAnimal.name);
+      if (letter[0].toLowerCase() === store.currentAnimal.name[0].toLowerCase()) {
+        console.log('correct!')
+
+        //switch to animalDisplay
+        //maybe have speechsynthesis
+        //after 3-5 seconds, move onto the next letter
+        $scope.displayMode = 'animal';
+        $scope.$apply();
+        setTimeout(() => $scope.updateIndex(), 5000);
+
+      } else {
+        console.log('please try again')
+      }
+
+      recognition.stop();
+    }
+
+    recognition.onend = () => {
+      SpeechRecognitionSetup();
+    }
+
   }
+
+  $scope.showCurrentAnimal = store.currentAnimal;
 
   $scope.updateIndex = () => {
     if (store.gameMode === 'abc') {
@@ -55,24 +98,23 @@ myAnimalApp.controller('myGameController',
     } else {
       store.animalIndex = Math.floor(Math.random() * store.remainingAnimals.length);
     }
-  }
-  
-  $scope.checkLetter = (letter) => {
-    //if letter spoken === letter of animal
-
-    if ($scope.remainingAnimals.length === 0) {
-      //set win message
-      $location.path('/game-complete');
-
-    }
+    store.currentAnimal = store.remainingAnimals[store.animalIndex];
+    $scope.showCurrentAnimal = store.currentAnimal;
+    $scope.displayMode = 'letter';
+    $scope.$apply();
   }
 
   $scope.displayMode = 'letter'; 
+  SpeechRecognitionSetup();
 }])
 
 
 myAnimalApp.controller('myHomeController', 
   ['$scope', '$location', 'store', function($scope, $location, store) {
+
+  if (!('webkitSpeechRecognition') in window) {
+    alert('WebkitSpeechRecognition is required to use this app.  Please update your browser (Chrome, Edge, Firefox) before proceeding')
+  }
 
   //functions
   $scope.startGame = (option) => {
