@@ -1,121 +1,95 @@
 const myAnimalApp = angular.module('myAnimalApp', ['ngRoute']);
 
-myAnimalApp.config(['$routeProvider', ($routeProvider) => {
+myAnimalApp.config(['$routeProvider', '$locationProvider', ($routeProvider, $locationProvider) => {
   $routeProvider
     .when('/', {
       templateUrl: './views/home.html',
-      controller: 'myAnimalController'
+      controller: 'myHomeController'
     })
     .when('/game', {
       templateUrl: './views/game.html',
-      controller: 'myAnimalController'
+      controller: 'myGameController',
+    })
+    .when('/game-complete', {
+      templateUrl: './views/game-complete.html',
     })
     .otherwise({
       redirectTo: '/'
     });
+
+  $locationProvider.html5Mode(true);
 }])
 
-myAnimalApp.directive('gameDisplay', [function(){
-  return {
-    restrict: 'E',
-    scope: {
-      animals: '=',
-      animalIndex: '='
-    },
-    templateUrl: '',
-    replace: true,
-    controller: function($scope) {
-      //when ready
-      //implement webspeechRecognition listener here
-    }
-  }
-}])
+myAnimalApp.factory('store', function($http) {
+  var store = {}
 
-myAnimalApp.controller('myAnimalController', ['$scope', function($scope) {
-  //main data - do not modify!!
-  $scope.animals = [
-    {
-      name: 'Aye Aye',
-      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Wild_aye_aye.jpg/500px-Wild_aye_aye.jpg',
-    },
-    {
-      name: 'Bandicoot',
-      img: 'https://upload.wikimedia.org/wikipedia/commons/8/8b/Perameles_gunni.jpg',
-    },
-    {
-      name: 'Cichlid',
-      img: 'https://upload.wikimedia.org/wikipedia/commons/6/6e/Freshwater_angelfish_biodome.jpg',
-    },
-    {
-      name: 'Dogue De Bordeaux',
-      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/DJT_0086.jpg/800px-DJT_0086.jpg',
-    },
-    {
-      name: 'Elephant Shrew',
-      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Rhynchocyon_petersi_from_side.jpg/800px-Rhynchocyon_petersi_from_side.jpg',
-    },
-    {
-      name: 'Frigate Bird',
-      img: 'https://upload.wikimedia.org/wikipedia/commons/3/34/Male_Frigate_bird.jpg',
-    },
-    {
-      name: 'Green Bee-Eater',
-      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Green_bee-eater_%28Merops_orientalis%29_Photograph_by_Shantanu_Kuveskar.jpg/320px-Green_bee-eater_%28Merops_orientalis%29_Photograph_by_Shantanu_Kuveskar.jpg',
-    },
-    {
-      name: 'Hawaiian Honeycreeper',
-      img: 'https://upload.wikimedia.org/wikipedia/commons/d/d9/Iiwi.jpg',
-    },
-    {
-      name: 'Indri',
-      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Indri_indri_001.jpg/800px-Indri_indri_001.jpg',
-    },
-    {
-      name: 'Jeroba',
-      img: 'https://upload.wikimedia.org/wikipedia/commons/c/c5/Four-toes-jerboa.jpg',
-    },
-    {
-      name: 'Kakapo',
-      img: 'https://upload.wikimedia.org/wikipedia/commons/a/aa/Sirocco_full_length_portrait.jpg',
-    }
-  ]
+  store.animals = [];
+  store.solvedAnimals = [];
+  store.remainingAnimals = [];
+  store.animalIndex = 0;
+  store.currentAnimal = null;
+  store.gameMode = 'abc';
 
-  //functions
-  $scope.startGame = (option) => {
-    $scope.remainingAnimals = $scope.animals.slice();
-    $scope.solvedAnimals = [];
-    $scope.gameMode = option;
+  $http
+    .get('./data/data.js')
+    .then(({ data }) => {
+      store.animals = data;
+      store.remainingAnimals = data.slice();
+    })
 
-    //function to start game
-    //depending on option, set the starting $scope.index
-  }
+  return store;
+})
 
+myAnimalApp.controller('myGameController', 
+  ['$scope', '$location', 'store', function($scope, $location, store) {
   
+  $scope.showCurrentAnimal = () => {
+    return store.currentAnimal;
+  }
+
   $scope.updateIndex = () => {
-    if ($scope.gameMode === 'abc') {
-      $scope.index += 1;
-    } else if  ($scope.gameMode === 'cba') {
-      $scope.index -= 1;
+    if (store.gameMode === 'abc') {
+      store.animalIndex += 1;
+    } else if  (store.gameMode === 'cba') {
+      store.animalIndex -= 1;
     } else {
-      $scope.index = Math.floor(Math.random() * $scope.animals.length);
+      store.animalIndex = Math.floor(Math.random() * store.remainingAnimals.length);
     }
   }
   
   $scope.checkLetter = (letter) => {
     //if letter spoken === letter of animal
+
+    if ($scope.remainingAnimals.length === 0) {
+      //set win message
+      $location.path('/game-complete');
+
+    }
   }
-  
-  
-  //data
-  $scope.solvedAnimals = [
-    //upon solving, push solved here to display on the side
-  ]
 
-  $scope.remainingAnimals = [];
+  $scope.displayMode = 'letter'; 
+}])
 
-  $scope.gameMode = 'abc'; //determines how index will be chosen (increment, decrement, random)
-  $scope.animalIndex = 0;
-  $scope.displayMode = 'letter'
 
-  
+myAnimalApp.controller('myHomeController', 
+  ['$scope', '$location', 'store', function($scope, $location, store) {
+
+  //functions
+  $scope.startGame = (option) => {
+    //reset game data
+    store.solvedAnimals = [];
+    store.remainingAnimals = store.animals.slice();
+    store.gameMode = option;
+
+    //function to start game
+    //depending on option, set the starting $scope.index
+    if (option === 'cba') {
+      store.animalIndex = store.remainingAnimals.length - 1;
+    } else if (option === 'cab') {
+      store.animalIndex = Math.floor(Math.random() * store.remainingAnimals.length);
+    }
+
+    store.currentAnimal = store.remainingAnimals[store.animalIndex];
+    $location.path('/game');
+  }
 }])
