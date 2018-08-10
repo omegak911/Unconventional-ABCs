@@ -1,6 +1,28 @@
-<div class="flexCenter flexColumn">
+<div class="flexCenter flexColumn page">
   <div>
-    <div ng-show="displayMode === 'letter'" ng-include="'../components/letterDisplay.html'" ></div>
-    <div ng-hide="displayMode === 'letter'" ng-include="'../components/animalDisplay.html'"></div>
+    <div ng-show="displayMode === 'letter'">
+      <p>
+        Name an animal that starts with this letter!
+      </p>
+      <div ng-include="'../components/letterDisplay.html'" ></div>
+    </div>
+    <div ng-hide="displayMode === 'letter'">
+      <div>
+        That's right! Here's another animal that also starts with the same letter:
+      </div>
+      <div ng-include="'../components/animalDisplay.html'"></div>
+      <div ng-init="countdown = 5" class="countdown">
+        Moving onto next letter in {{ countdown }} seconds
+      </div>
+    </div>
   </div>
 </div>
+
+<style>
+  .countdown {
+    text-align: center;
+    font-size: 2em;
+    margin: 5px;
+  }
+
+</style>
