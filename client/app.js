@@ -91,19 +91,23 @@ myAnimalApp.controller('myGameController',
   $scope.solvedLetters = [];
 
   $scope.updateIndex = () => {
-    if (store.gameMode === 'abc') {
-      store.animalIndex += 1;
-    } else if  (store.gameMode === 'cba') {
-      store.animalIndex -= 1;
-    } else {
-      store.animalIndex = Math.floor(Math.random() * store.remainingAnimals.length);
+    if (store.remainingAnimals.length === 0) { //game complete
+      $location.path('/game-complete');
+      $scope.$apply()
+    } else {  //update next letter
+      if (store.gameMode === 'abc') {
+        store.animalIndex += 1;
+      } else if  (store.gameMode === 'cba') {
+        store.animalIndex -= 1;
+      } else {
+        store.animalIndex = Math.floor(Math.random() * store.remainingAnimals.length);
+      }
+      store.currentAnimal = store.remainingAnimals[store.animalIndex];
+      $scope.showCurrentAnimal = store.currentAnimal;
+      $scope.displayMode = 'letter';
+      $scope.countdown = 5;
+      $scope.$apply();
     }
-    store.currentAnimal = store.remainingAnimals[store.animalIndex];
-    $scope.showCurrentAnimal = store.currentAnimal;
-    $scope.displayMode = 'letter';
-    $scope.countdown = 5;
-    $scope.$apply();
-    console.log($scope.solvedLetters)
   }
 
   $scope.updateRemainingAndSolved = () => {
