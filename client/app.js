@@ -15,6 +15,22 @@ myAnimalApp.config(['$routeProvider', ($routeProvider) => {
     });
 }])
 
+myAnimalApp.directive('gameDisplay', [function(){
+  return {
+    restrict: 'E',
+    scope: {
+      animals: '=',
+      animalIndex: '='
+    },
+    templateUrl: '',
+    replace: true,
+    controller: function($scope) {
+      //when ready
+      //implement webspeechRecognition listener here
+    }
+  }
+}])
+
 myAnimalApp.controller('myAnimalController', ['$scope', function($scope) {
   //main data - do not modify!!
   $scope.animals = [
@@ -98,7 +114,8 @@ myAnimalApp.controller('myAnimalController', ['$scope', function($scope) {
   $scope.remainingAnimals = [];
 
   $scope.gameMode = 'abc'; //determines how index will be chosen (increment, decrement, random)
-  $scope.index = 0;
+  $scope.animalIndex = 0;
+  $scope.displayMode = 'letter'
 
   
 }])

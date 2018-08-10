@@ -1,3 +1,6 @@
 <div ng-controller="myAnimalController" class="flexCenter flexColumn">
-  <div ng-include="'../components/letterDisplay.html'"></div>
+  <game-display animals="animals" animal-index="animal-index">
+    <div ng-show="displayMode === 'letter'" ng-include="'../components/letterDisplay.html'" ></div>
+    <div ng-hide="displayMode === 'letter'" ng-include="'../components/animalDisplay.html'"></div>
+  </game-display>
 </div>
