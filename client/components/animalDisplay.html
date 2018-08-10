@@ -1,7 +1,7 @@
 <div id="animalDisplay" class="flexCenter">
   <div class="animalInnerDisplay flexCenter flexColumn">
-    <h1>{{ animals[animal-index].name }}</h1>
-    <img ng-src="{{ animals[animal-index].img }}" alt="photo of {{ animals[animal-index].name }}">
+    <h1>{{ showCurrentAnimal.name }}</h1>
+    <img ng-src="{{ showCurrentAnimal.img }}" alt="photo of {{ showCurrentAnimal.name }}">
   </div>
 </div>
 
@@ -19,7 +19,7 @@
   }
 
   .animalInnerDisplay img {
-    height: auto;
+    height: 250px;
     width: 100%;
   }
 
