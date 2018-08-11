@@ -15,7 +15,7 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel-loader',
         options: {
-          presets: ['stage-0']
+          presets: ['angular', 'env', 'stage-0']
         }
       },
       {
