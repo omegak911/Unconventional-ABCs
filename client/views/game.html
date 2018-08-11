@@ -2,8 +2,11 @@
   <div class="topSolvedContainer" ng-include="'./client/components/solvedDisplay.html'"></div>
   <div class="flexColumn letterAnimalDisplayContainer">
     <div ng-show="displayMode === 'letter'" class="generalGameText">
-      <p>
+      <p ng-hide="error">
         Name an animal that starts with this letter!
+      </p>
+      <p ng-show="error">
+        I'm not sure if that's correct.  Please try again.
       </p>
       <div ng-include="'./client/components/letterDisplay.html'" class="flexCenter"></div>
     </div>

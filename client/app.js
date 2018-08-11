@@ -64,6 +64,7 @@ myAnimalApp.controller('myGameController',
       if (letter[0].toLowerCase() === store.currentAnimal.name[0].toLowerCase()) {
         const decrement = $interval(() => $scope.countdown -= 1, 1000);
         $scope.displayMode = 'animal';
+        $scope.error = false;
         $scope.$apply();
         //update to next letter after 5 seconds
         setTimeout( async () => {
@@ -74,7 +75,8 @@ myAnimalApp.controller('myGameController',
         }, 5000);
       } else {
         //we'll probably want to display a error message on the front end
-        console.log('please try again')
+        $scope.error = true;
+        $scope.$apply()
         recognition.stop();
       }
     }
@@ -89,6 +91,7 @@ myAnimalApp.controller('myGameController',
   $scope.countdown = 5;
   $scope.showCurrentAnimal = store.currentAnimal;
   $scope.solvedLetters = [];
+  $scope.error = false;
 
   $scope.updateIndex = () => {
     if (store.remainingAnimals.length === 0) { //game complete
