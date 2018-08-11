@@ -1,17 +1,17 @@
 <div class="flexCenter page">
   <div class="topSolvedContainer" ng-include="'./client/components/solvedDisplay.html'"></div>
-  <div class="flexCenter flexColumn letterAnimalDisplayContainer">
-    <div ng-show="displayMode === 'letter'">
+  <div class="flexColumn letterAnimalDisplayContainer">
+    <div ng-show="displayMode === 'letter'" class="generalGameText">
       <p>
         Name an animal that starts with this letter!
       </p>
-      <div ng-include="'./client/components/letterDisplay.html'" ></div>
+      <div ng-include="'./client/components/letterDisplay.html'" class="flexCenter"></div>
     </div>
     <div ng-hide="displayMode === 'letter'">
-      <div>
+      <div class="generalGameText">
         That's right! Here's another animal that also starts with the same letter:
       </div>
-      <div ng-include="'./client/components/animalDisplay.html'"></div>
+      <div ng-include="'./client/components/animalDisplay.html'" class="flexCenter"></div>
       <div class="countdown">
         Moving onto next letter in {{ countdown }} seconds
       </div>
@@ -26,7 +26,15 @@
     margin: 5px;
   }
 
+  .generalGameText {
+    font-size: 2em;
+    text-align: center;
+  }
+
   .letterAnimalDisplayContainer {
+    display: flex;
+    align-items: center;
+    margin-right: 15%;
     width: 85%;
   }
 

@@ -1,7 +1,9 @@
-<div class="flexCenter flexColumn page">
+<div class="welcomeTopContainer page">
   <div class="welcome flexCenter flexColumn">
-    <div>
-      <h3>Welcome!  To start, please choose an option</h3>
+    <div class="welcomeMsg">
+      <h3>Welcome!  To start, please choose an option and 
+        allow microphone access upon requested.</h3>
+        <h3>Enjoy!</h3>
     </div>
     <div class="options flexCenter flexColumn">
       <button ng-click="startGame('abc')">Play Alphabetically</button>
@@ -12,9 +14,19 @@
 </div>
 
 <style>
+  .welcomeTopContainer {
+    display: flex;
+    justify-content: center;
+  }
+
   .welcome {
     background-color: lightblue;
     width: 90%;
+  }
+
+  .welcomeMsg {
+    text-align: center;
+    width: 40%;
   }
 
   .options {
