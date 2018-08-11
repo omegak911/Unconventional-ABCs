@@ -3,15 +3,15 @@ const myAnimalApp = angular.module('myAnimalApp', ['ngRoute']);
 myAnimalApp.config(['$routeProvider', '$locationProvider', ($routeProvider, $locationProvider) => {
   $routeProvider
     .when('/', {
-      templateUrl: './views/home.html',
+      templateUrl: './client/views/home.html',
       controller: 'myHomeController'
     })
     .when('/game', {
-      templateUrl: './views/game.html',
+      templateUrl: './client/views/game.html',
       controller: 'myGameController',
     })
     .when('/game-complete', {
-      templateUrl: './views/game-complete.html',
+      templateUrl: './client/views/game-complete.html',
     })
     .otherwise({
       redirectTo: '/'
@@ -30,12 +30,11 @@ myAnimalApp.factory('store', function($http) {
   store.gameMode = 'abc';
 
   $http
-    .get('./data/data.js')
+    .get('./client/data/data.js')
     .then(({ data }) => {
       store.animals = data;
       store.remainingAnimals = data.slice();
     })
-
   return store;
 })
 
@@ -96,9 +95,7 @@ myAnimalApp.controller('myGameController',
       $location.path('/game-complete');
       $scope.$apply()
     } else {  //update next letter
-      if (store.gameMode === 'abc') {
-        store.animalIndex += 1;
-      } else if  (store.gameMode === 'cba') {
+      if (store.gameMode === 'cba') {
         store.animalIndex -= 1;
       } else {
         store.animalIndex = Math.floor(Math.random() * store.remainingAnimals.length);

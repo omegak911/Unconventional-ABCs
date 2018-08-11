@@ -1,17 +1,17 @@
 <div class="flexCenter page">
-  <div class="topSolvedContainer" ng-include="'../components/solvedDisplay.html'"></div>
+  <div class="topSolvedContainer" ng-include="'./client/components/solvedDisplay.html'"></div>
   <div class="flexCenter flexColumn letterAnimalDisplayContainer">
     <div ng-show="displayMode === 'letter'">
       <p>
         Name an animal that starts with this letter!
       </p>
-      <div ng-include="'../components/letterDisplay.html'" ></div>
+      <div ng-include="'./client/components/letterDisplay.html'" ></div>
     </div>
     <div ng-hide="displayMode === 'letter'">
       <div>
         That's right! Here's another animal that also starts with the same letter:
       </div>
-      <div ng-include="'../components/animalDisplay.html'"></div>
+      <div ng-include="'./client/components/animalDisplay.html'"></div>
       <div class="countdown">
         Moving onto next letter in {{ countdown }} seconds
       </div>
